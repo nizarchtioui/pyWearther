@@ -16,25 +16,20 @@ import os
 from flask import Flask, request, render_template, g, jsonify
 import pyowm, json, collections, sqlite3
 from datetime import date, timedelta
-from pyowm.exceptions.not_found_error import NotFoundError
 from src.api.WeatherMANGER import WeatherManager
 
 # replace with your API key
 API_key = 'b631d429365b4f37eaad3a853e2d2234'
 # create global OWM object
 owm = pyowm.OWM(API_key)
+port = int(os.environ.get('PORT', 5000))
 
 
 # create app
 app = Flask(__name__)
 
 # app configuration
-app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'flask_weather_app.db'),
-    SECRET_KEY='development key',
-    USERNAME='admin',
-    PASSWORD='default'
-))
+
 
 
 def connect_db():
@@ -204,6 +199,7 @@ def get_forecast(id):
                 days[key].append(data)
             # raises error if time is out of range
             # e.g. getting today's weather at 12 o'clock when current time is past 12
-            except NotFoundError:
+            except :
                 pass
     return days
+app.run(host='0.0.0.0', port=port, debug=True)
