@@ -1,6 +1,5 @@
 requests
 Flask
 pyowm
-sqlite3
 timedelta
 gunicorn
