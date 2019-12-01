@@ -1,0 +1,8 @@
+requests
+Flask
+pyowm
+json
+collections
+sqlite3
+timedelta
+gunicorn
