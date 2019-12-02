@@ -55,9 +55,19 @@
 			<div class="hero" data-bg-image='{{ url_for("static", filename="images/banner.png")}}'>
 				<div class="container">
 					<form action="#" class="find-location">
-						<input type="text" id="address-input" placeholder="Find your location...">
-						<input type="submit" value="Find">
+						<input type="text" id="address-input" autocomplete="off" placeholder="Find your location...">
+						<input type="submit" value="Find" id="searchCountry">
+						
 					</form>
+					<ul id="listSuggest" style="    background-color: #1e202b;
+					width: 40%;
+					height: auto;
+					position: absolute;
+					z-index: 99999;
+					border-radius: 24px;
+					padding: 20px;" hidden>
+
+						</ul>
 
 				</div>
 			</div>
@@ -184,26 +194,76 @@
 			</footer> <!-- .site-footer -->
 		</div>
 		
-		<script src='{{ url_for("static", filename="js/jquery-1.11.1.min.js")}}'></script>
+		<!-- <script src='{{ url_for("static", filename="js/jquery-1.11.1.min.js")}}'></script> -->
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 		<script src='{{ url_for("static", filename="js/plugins.js")}}'></script>
 		<script src='{{ url_for("static", filename="js/app.js")}}'></script>
 		<!-- geolocalisation autocomplete -->
 		<!-- <script src='{{ url_for("static", filename="js/jsdeliv.min.js")}}'></script> -->
-		<script src="https://cdn.jsdelivr.net/npm/algoliasearch@3/dist/algoliasearch.min.js"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/algoliasearch@3/dist/algoliasearch.min.js"></script> -->
+	
 		<script>
-			// Gets the rights of a key
-			const client = algoliasearch('plM1KG9UKWQR', 'd6386f212331969e41493051ede9a25f');
-			const index = client.initIndex('Chtioui Nizar');
-			client.getApiKey('d6386f212331969e41493051ede9a25f', (err, content) => {
-			if (err) throw err;
 
-			console.log(content);
-			var placesAutocomplete = places({
-			  appId: "plM1KG9UKWQR",
-			  apiKey: "d6386f212331969e41493051ede9a25f",
-			  container: document.querySelector('#address-input')
-			});
-			});
+				$( document ).ready(function() {
+
+					$("body").on('click','.listSuggestionLi',function(){
+
+						$('#address-input').val($(this).text());
+						$("#listSuggest").empty();
+						if ($("#listSuggest :not(:contains(li))") ){
+							$('#listSuggest').hide();
+							}
+					});
+
+					$('body').on('click','#searchCountry',function(){
+						
+						var adress_inpt = $('#address-input').val();
+						window.location.replace("findplace/"+adress_inpt);
+					});
+					$('#address-input').on('keyup',function () { 
+						let adress_inpt = $('#address-input').val();
+					
+						if (($(this).val().length) < 3 ){
+							return false;
+						}
+							var settings = {
+											"async": true,
+											"crossDomain": true,
+											"url": "https://api.locationiq.com/v1/autocomplete.php?key=011b91d8d3b1f8&q="+adress_inpt,
+											"method": "GET"
+											}
+							var availableTags = [];
+
+						$.ajax(settings).done(function (response) {
+												
+											console.log(response);
+											response.map( function(adre) {
+											
+												availableTags.push(adre["address"].name)
+											
+											});
+											var foo;
+											console.log(availableTags);
+											$("#listSuggest").empty();
+											availableTags.map(function(arr){
+												$("#listSuggest").append('<li class="listSuggestionLi" onmouseover="this.style.backgroundColor=\'#006db9\'" style="hover:list-style-type: none;padding: 6px;">'+arr+'</li>');
+											});
+											if ($("#listSuggest :not(:contains(li))") ){
+												$('#listSuggest').show();
+												}
+
+								
+											
+						});
+					});
+
+				});
+				
+			
+		
+
+		
 		
 		  </script>
 

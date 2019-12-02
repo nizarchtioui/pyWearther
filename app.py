@@ -5,7 +5,7 @@
 
     A weather application.
   
-    :copyright: (2016) by solcis.
+    :copyright: (2019-2022) by NizarCht.
     :license: MIT, see LICENSE for more details.
 
 """
@@ -27,6 +27,10 @@ def index():
     temper = WeatherManager.getWeatherByCountry(country)
     return render_template('index.html', country=country, C_Wearher = temper)
 
+@app.route('/findplace/<place>')
+def navigate(place):
+    temper = WeatherManager.getWeatherByCountry(place)
+    return render_template('index.html', country=place, C_Wearher = temper)
 if __name__ == '__main__':
         import os  
         port = int(os.environ.get('PORT', 5000)) 
