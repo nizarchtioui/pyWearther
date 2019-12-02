@@ -22,15 +22,22 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 @app.route('/')
 def index():
-    current_ip = WeatherManager.get_ip()
-    country = WeatherManager.getCountryName(current_ip)
-    temper = WeatherManager.getWeatherByCountry(country)
-    return render_template('index.html', country=country, C_Wearher = temper)
+    try:
+         place = request.args['place']
+         current_ip = request.args['ip']
+    except:
+        current_ip = WeatherManager.get_ip()
+        place = WeatherManager.getCountryName(current_ip)
 
-@app.route('/findplace/<place>')
-def navigate(place):
     temper = WeatherManager.getWeatherByCountry(place)
     return render_template('index.html', country=place, C_Wearher = temper)
+# @app.route('/temper')
+# def getcountry():
+#       ip = request.args['ip']
+#       place = WeatherManager.getCountryName(ip)
+#       return place
+    
+
 if __name__ == '__main__':
         import os  
         port = int(os.environ.get('PORT', 5000)) 

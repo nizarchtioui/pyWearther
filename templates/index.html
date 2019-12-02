@@ -27,7 +27,7 @@
 		<div class="site-content">
 			<div class="site-header">
 				<div class="container">
-					<a href="index.html" class="branding">
+					<a href="/" class="branding">
 						<img src='{{ url_for("static", filename="images/logo.png")}}' alt="" class="logo">
 						<div class="logo-type">
 							<h1 class="site-title">Chtioui Nizar</h1>
@@ -39,7 +39,7 @@
 					<div class="main-navigation">
 						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 						<ul class="menu">
-							<li class="menu-item current-menu-item"><a href="index.html">Home</a></li>
+							<li class="menu-item current-menu-item"><a href="/">Home</a></li>
 							<!-- <li class="menu-item"><a href="news.html">News</a></li>
 							<li class="menu-item"><a href="live-cameras.html">Live cameras</a></li>
 							<li class="menu-item"><a href="photos.html">Photos</a></li>
@@ -54,9 +54,9 @@
 
 			<div class="hero" data-bg-image='{{ url_for("static", filename="images/banner.png")}}'>
 				<div class="container">
-					<form action="#" class="find-location">
+					<form action="javascript:searchItem();" class="find-location" id="findfrm">
 						<input type="text" id="address-input" autocomplete="off" placeholder="Find your location...">
-						<input type="submit" value="Find" id="searchCountry">
+						<input type="submit"  value="Find" id="searchCountry" >
 						
 					</form>
 					<ul id="listSuggest" style="    background-color: #1e202b;
@@ -74,6 +74,7 @@
 			<div class="forecast-table">
 				<div class="container">
 					<div class="forecast-container">
+						<center>
 						<div class="today forecast">
 							<div class="forecast-header">
 								<div class="day">Monday</div>
@@ -92,79 +93,7 @@
 								<span><img src='{{ url_for("static", filename="images/icon-compass.png")}}' alt="">East</span>
 							</div>
 						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Tuesday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src='{{ url_for("static", filename="images/icons/icon-3.svg")}}' alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Wednesday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src='{{ url_for("static", filename="images/icons/icon-5.svg")}}' alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Thursday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src='{{ url_for("static", filename="images/icons/icon-7.svg")}}' alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Friday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src='{{ url_for("static", filename="images/icons/icon-12.svg")}}' alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Saturday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src='{{ url_for("static", filename="images/icons/icon-13.svg")}}' alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Sunday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src='{{ url_for("static", filename="images/icons/icon-14.svg")}}' alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-					</div>
+					</center>
 				</div>
 			</div>
 		
@@ -205,8 +134,38 @@
 	
 		<script>
 
+			function searchItem(){
+									console.log("form")
+									var adress_inpt = $('#address-input').val();
+									id = $.urlParam('ip');    
+									console.log("/?ip="+id+"&"+"place="+adress_inpt)
+									window.location.href ="/?ip="+id+"&"+"place="+adress_inpt;
+								}
 				$( document ).ready(function() {
+					$.urlParam = function(name){
+						var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+						return results[1] || 0;
+					}
+						
+						$.ajax({
+							url : 'https://api.ipify.org/?format=json',
+							type : 'GET',
+							success : function(response){
+								var id;
+								try{
+									id = $.urlParam('ip');    
+								}catch(e){
+									id = "154"
+								}
+								console.log(id);
+								if (id!=response["ip"])
+								{
+									window.location.replace("/?ip="+response["ip"]);
+								}
+							}
+						});
 
+ 
 					$("body").on('click','.listSuggestionLi',function(){
 
 						$('#address-input').val($(this).text());
@@ -216,12 +175,7 @@
 							}
 					});
 
-					$('body').on('click','#searchCountry',function(){
-						
-						var adress_inpt = $('#address-input').val();
-						
-						window.location.replace("findplace/"+adress_inpt);
-					});
+				
 					$('#address-input').on('keyup',function () { 
 						let adress_inpt = $('#address-input').val();
 					
@@ -248,7 +202,7 @@
 											console.log(availableTags);
 											$("#listSuggest").empty();
 											availableTags.map(function(arr){
-												$("#listSuggest").append('<li class="listSuggestionLi" onmouseover="this.style.backgroundColor=\'#006db9\'" style="hover:list-style-type: none;padding: 6px;">'+arr+'</li>');
+												$("#listSuggest").append('<li class="listSuggestionLi" onmouseover="this.style.backgroundColor=\'#006db9\'" onmouseout="this.style.backgroundColor="" style="hover:list-style-type: none;padding: 6px;">'+arr+'</li>');
 											});
 											if ($("#listSuggest :not(:contains(li))") ){
 												$('#listSuggest').show();
