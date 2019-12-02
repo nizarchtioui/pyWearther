@@ -1212,7 +1212,7 @@ form textarea {
 
 .find-location {
   position: relative;
-  margin-bottom: 70px; }
+  margin-bottom: 0px; }
   .find-location input[type="text"] {
     width: 100%;
     padding: 20px 50px 20px 20px;
@@ -1674,3 +1674,18 @@ form textarea {
     .site-footer .social-links a:hover {
       background: #009ad8;
       color: white; }
+      #listSuggest li{
+        list-style-type: none;
+        padding: 6px;
+      }
+      #listSuggest {
+            background-color: #1e202b;
+    width: 40%;
+    height: auto;
+    position: absolute;
+    z-index: 99999;
+    border-radius: 24px;
+    padding: 20px;
+      }
+  
+    
