@@ -138,8 +138,8 @@
 									console.log("form")
 									var adress_inpt = $('#address-input').val();
 									id = $.urlParam('ip');    
-									console.log("/?ip="+id+"&"+"place="+adress_inpt)
-									window.location.href ="/?ip="+id+"&"+"place="+adress_inpt;
+									console.log("?ip="+id+"&"+"place="+adress_inpt)
+									window.location.href ="?ip="+id+"&"+"place="+adress_inpt;
 								}
 				$( document ).ready(function() {
 					$.urlParam = function(name){
@@ -160,7 +160,7 @@
 								console.log(id);
 								if (id!=response["ip"])
 								{
-									window.location.replace("/?ip="+response["ip"]);
+									window.location.replace("?ip="+response["ip"]);
 								}
 							}
 						});

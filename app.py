@@ -24,19 +24,19 @@ app.config['DEBUG'] = True
 def index():
     try:
          place = request.args['place']
-         current_ip = request.args['ip']
     except:
-        current_ip = WeatherManager.get_ip()
-        place = WeatherManager.getCountryName(current_ip)
+        try:
+            current_ip = request.args['ip']
+            place = WeatherManager.getCountryName(current_ip)
+        except:
+            current_ip = WeatherManager.get_ip()
+            place = WeatherManager.getCountryName(current_ip)
+        
+        
 
     temper = WeatherManager.getWeatherByCountry(place)
     return render_template('index.html', country=place, C_Wearher = temper)
-# @app.route('/temper')
-# def getcountry():
-#       ip = request.args['ip']
-#       place = WeatherManager.getCountryName(ip)
-#       return place
-    
+
 
 if __name__ == '__main__':
         import os  
